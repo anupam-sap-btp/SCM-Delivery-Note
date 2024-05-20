@@ -1,7 +1,7 @@
 from fpdf import FPDF
 import streamlit as st
 
-def generate_delivery_note(product_data):
+def generate_delivery_note(id, product_data):
     pdf = FPDF()
     pdf.add_page()
 
@@ -11,7 +11,7 @@ def generate_delivery_note(product_data):
     # Set title and fonts after the logo
     pdf.set_xy(0, 30)  # Reset position after logo; adjust y coordinate based on logo size
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt="Delivery Note", ln=True, align='C')
+    pdf.cell(200, 10, txt=f"Delivery Note {id}", ln=True, align='C')
 
     # Add table headers
     pdf.cell(40, 10, "Product ID", border=1, ln=0)
@@ -32,5 +32,10 @@ def generate_delivery_note(product_data):
     pdf.cell(180, 10, "Total Price: $" + str(total_price), border=1, ln=1, align='C')
 
     # Output the PDF
-    pdf.output("delivery_note.pdf")
-    st.success('PDF generated successfully! PDF is saved in the server directory.')
+    filename = f"output/Delivery_Note_{id}.pdf"
+    pdf.output(filename)
+    with open(filename, "rb") as pdf_file:
+        PDFbyte = pdf_file.read()
+        
+    st.success(f'Delivery Note {id} is created and PDF generated successfully!')
+    return PDFbyte

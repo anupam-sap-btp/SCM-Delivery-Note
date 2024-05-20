@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from backend.dboperations import get_item_details
+from backend.dboperations import get_item_details, create_delivery
 from helper_function.delivery_note import generate_delivery_note
 from helper_function.barcode_scan import scan_barcode_opencv
 # from fpdf import FPDF
@@ -45,5 +45,12 @@ if not st.session_state['data'].empty:
     st.write(f"Total Price: ${total_price}")
 
 # Button to generate PDF
-if st.button("Generate Delivery Note PDF"):
-    generate_delivery_note(st.session_state['data'])
+if st.button("Generate Delivery Note PDF",disabled=st.session_state['data'].empty):
+    id_created = create_delivery(st.session_state['data'])
+    pdf_data = generate_delivery_note(id_created, st.session_state['data'])
+
+
+    st.download_button(label="Download Delivery Note",
+                        data=pdf_data,
+                        file_name=f"Delivery_Note_{id_created}.pdf",
+                    mime='application/octet-stream')    

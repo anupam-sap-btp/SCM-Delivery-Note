@@ -23,9 +23,25 @@ def get_item_details(barcode):
     try:
         with psycopg2.connect(conn_str) as conn:
             with conn.cursor() as cursor:
-                cursor.execute("SELECT product_id, product_name, product_price, product_stock FROM products WHERE barcode = %s", (barcode,))
+                cursor.execute("SELECT id, name, price, available_quantity FROM products WHERE barcode = %s", (barcode,))
                 item = cursor.fetchone()
     except Exception as e:
         print("Database connection failed due to {}".format(e))
     
     return item
+
+def create_delivery(item):
+    item_val = list(item.itertuples(index=False, name = None ))
+    conn_str = f"dbname='{dbname}' user='{user}' password='{password}' host='{host}' port='{port}'"
+    try:
+        with psycopg2.connect(conn_str) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("INSERT INTO delivery (product_id, product_name, product_price, product_qty) VALUES %s RETURNING id", (item_val))
+                conn.commit()
+                id_created, = cursor.fetchone()
+                print(id_created)
+
+    except Exception as e:
+        print("Database connection failed due to {}".format(e))
+
+    return id_created
