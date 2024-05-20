@@ -23,7 +23,7 @@ def get_item_details(barcode):
     try:
         with psycopg2.connect(conn_str) as conn:
             with conn.cursor() as cursor:
-                cursor.execute("SELECT id, name, price, available_quantity FROM products WHERE barcode = %s", (barcode,))
+                cursor.execute("SELECT product_id, product_name, product_price, product_stock FROM products WHERE barcode = %s", (barcode,))
                 item = cursor.fetchone()
     except Exception as e:
         print("Database connection failed due to {}".format(e))
