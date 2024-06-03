@@ -30,3 +30,21 @@ UPDATE products SET barcode = '5678901234567' WHERE product_name = 'Apple Watch'
 
 INSERT INTO products (product_name, product_price, product_stock, barcode) VALUES
 ('NVIDIA', 1000.99, 2, 'X001GNLTSF');
+
+
+CREATE TABLE delivery (
+    id SERIAL PRIMARY KEY,
+    created_at timestamptz,
+    product_id int4,
+    product_name varchar(255),
+    product_qty int4,
+    product_price numeric(10, 2)
+);
+
+alter table delivery 
+alter column created_at
+drop default;
+
+alter table delivery 
+alter column created_at
+set default now();

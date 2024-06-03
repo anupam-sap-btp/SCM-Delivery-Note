@@ -1,0 +1,8 @@
+.env
+.gitignore
+env/
+*__pycache__*
+*.md
+*.pdf
+*.sql
+prompt.txt

@@ -1,0 +1,40 @@
+name: scm-delv
+services:
+  pg:
+    image: postgres:alpine
+    ports:
+      - 5430:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pgdb
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 5051:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@example.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    depends_on:
+      - pg
+  
+  scm-delivery-note:
+    image: scm-delivery-note:slim-v1.2
+    ports:
+      - 8501:8501
+    environment:
+      # dbname: pgdb
+      # user: user
+      # password: password
+      # host: pg
+      # port: 5432
+      dbname: postgres
+      user: postgres.ujvryouufoecmrqsjvrp
+      password: BasicDB@Supa24
+      host: aws-0-ap-southeast-1.pooler.supabase.com
+      port: 5432
+      
+volumes:
+  pg-data:
